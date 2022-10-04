@@ -8,10 +8,12 @@
 #     v=runif(n = n, 0, 10000)
 #   )
 
-sleep_func <- function(){Sys.sleep(5)}
-startTime<-Sys.time()
+# sleep_func <- function(){Sys.sleep(5)}
+# startTime<-Sys.time()
 knapsack_brute_force <- function(x, W){
+  sleep_func <- function(){Sys.sleep(5)}
   startTime<-Sys.time()
+ # startTime<-Sys.time()
   stopifnot(class(x) == "data.frame") #check that is a data frame
   stopifnot(class(W) == "numeric") #check that is a numeric value
 
@@ -71,8 +73,9 @@ knapsack_brute_force <- function(x, W){
   # print(es3)
   print(mvalue)
   print(elements)
-
+  endTime <- Sys.time()
+  print(endTime- startTime)
 }
-endTime <- Sys.time()
-print(endTime- startTime)
+# endTime <- Sys.time()
+# print(endTime- startTime)
 
