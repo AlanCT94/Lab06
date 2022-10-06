@@ -1,10 +1,11 @@
 Package: Lab06
-Title: What the Package Does (One Line, Title Case)
+Title: Implements code for Lab06: Writing fast R code
 Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Authors@R: c(
+    person("Alan", "Cacique Tamariz", email="alaca734@student.liu.se", role = c("cre")),
+    person("Kerstin", "Nilsson", email="kerni714@student.liu.se", role = c("aut")))
+Description: Implementation of different algorithms for the knapsack problem.
+             Timing of different approaches are provided.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
