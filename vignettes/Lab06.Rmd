@@ -1,0 +1,130 @@
+---
+title: "Lab06"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Lab06}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(Lab06)
+```
+Generate knapsack with 2000 items
+```{r}
+RNGversion(min(as.character(getRversion()),"3.5.3"))
+
+set.seed(42, kind = "Mersenne-Twister", normal.kind = "Inversion")
+
+n <- 2000
+knapsack_objects <-
+  data.frame(
+    w=sample(1:4000, size = n, replace = TRUE),
+    v=runif(n = n, 0, 10000)
+  )
+
+```
+
+1.1.2 Brute force search
+
+Time for n=16 objects:
+
+```{r}
+n_select <- 16
+system.time({brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500)})
+
+```
+
+1.1.3 Dynamic programming
+
+Time for n=500 objects:
+
+```{r}
+#Add dynamic programming
+```
+
+1.1.4 Greedy heuristic
+```{r}
+# Create knapsack object with 1000000 items
+```
+Time for n=1000000 objects:
+
+```{r}
+# Add greedy
+```
+
+1.1.5 Improvement of greedy heuristic
+
+```{r}
+# Example of improved greedy heuristic
+# why still greedy?
+```
+
+1.1.6 Profile your code and optimize your code
+
+... Below examples... develop text
+```{r}
+
+n_select <- 16
+#- For loop
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="forloop")
+system.time({
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="forloop")
+})
+
+#- Matrix --------------------#
+#filter items = false
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="matrix")
+system.time({
+  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="matrix")
+})
+
+#- Apply --------------------#
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="apply1a")
+system.time({
+  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="apply1a")
+})
+
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="apply1b")
+system.time({
+  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="apply1b")
+})
+
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="apply2")
+system.time({
+  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="apply2")
+})
+
+```
+
+1.1.8 Parallelize brute force search
+
+... add more text ....
+
+```{r}
+n_select <- 16
+#- Parallel --------------------#
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1a")
+system.time({
+  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1a")
+})
+
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1b")
+system.time({
+  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1b")
+})
+
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel2")
+system.time({
+  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel2")
+})
+
+```
+
