@@ -1,5 +1,5 @@
 
-brute_force_knapsack <- function(x, W, type, filter_items){
+brute_force_knapsack <- function(x, W, type="forloop", filter_items=FALSE){
 
   #- Checks of input
   stopifnot(is.data.frame(x),names(x)==c("w","v"),is.numeric(x$w),
