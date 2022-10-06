@@ -1,21 +1,21 @@
-# RNGversion(min(as.character(getRversion()),"3.5.3"))
-#
-# set.seed(42, kind = "Mersenne-Twister", normal.kind = "Inversion")
-# n <- 2000
-# knapsack_objects <-
-#   data.frame(
-#     w=sample(1:4000, size = n, replace = TRUE),
-#     v=runif(n = n, 0, 10000)
-#   )
+RNGversion(min(as.character(getRversion()),"3.5.3"))
+
+set.seed(42, kind = "Mersenne-Twister", normal.kind = "Inversion")
+n <- 2000
+knapsack_objects <-
+  data.frame(
+    w=sample(1:4000, size = n, replace = TRUE),
+    v=runif(n = n, 0, 10000)
+  )
 
 # sleep_func <- function(){Sys.sleep(5)}
 # startTime<-Sys.time()
-knapsack_brute_force <- function(x, W){
+brute_force_knapsack <- function(x, W){
   sleep_func <- function(){Sys.sleep(5)}
   startTime<-Sys.time()
  # startTime<-Sys.time()
   stopifnot(class(x) == "data.frame") #check that is a data frame
-  stopifnot(class(W) == "numeric") #check that is a numeric value
+  stopifnot(class(W) == "numeric", W >0) #check that is a numeric value
 
   n <- nrow(x)      #we obtain the number of rows
   df<- c() #create an empty vector
@@ -64,15 +64,13 @@ knapsack_brute_force <- function(x, W){
   es3 <-es2[es2$Value == max(es2$Value),]
   max_value<- max(es2$Value)
   index<- which(es2==max_value)
-  mvalue<- list("value"= max_value)
-  elements<-list("elements"= which(intToBits(as.numeric(rownames(es3)))==01))
-  # print(es2)
-  # print(max_value)
-  # print(index)
-  # print(rownames(es2))
-  # print(es3)
-  print(mvalue)
-  print(elements)
+ # mvalue<- list("value"= round(max_value))
+ # elements<-list("elements"= which(intToBits(as.numeric(rownames(es3)))==01))
+  result <- list("value"= round(max_value), "elements"= which(intToBits(as.numeric(rownames(es3)))==01))
+
+  #print(mvalue)
+  #print(elements)
+  return(result)
   endTime <- Sys.time()
   print(endTime- startTime)
 }

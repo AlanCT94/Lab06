@@ -46,7 +46,7 @@ greedy_knapsack <- function(x,W){
     index <- index[-length(index)]
 
 
-  list <- list("value"= round(total_value), "element"= index)
+  list <- list("value"= round(total_value), "elements"= index)
   #index<- as.list(index)
   #print(index)
   #print(order$v)
@@ -54,5 +54,5 @@ greedy_knapsack <- function(x,W){
 
   #print(total_value)
 
-  print(list)
+  return(list)
 }
