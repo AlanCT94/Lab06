@@ -88,12 +88,12 @@ construct becomes smaller with a smaller value for W.
 n<-1
 system.time(for (i in 1:n) greedy_knapsack(knapsack_objects[1:1200,],W=3500)) / n
 #100000 Objects
-<<<<<<< HEAD
+
 system.time(for (i in 1:n)greedy_knapsack(knapsack_objects_greedy[1:1000000,],W=3500))/n
-=======
+
 system.time(for (i in 1:n)greedy_knapsack(knapsack_objects_greedy[1:100000,],
                                           W=3500))/n
->>>>>>> 1a4623bb69c03507a885f7205d254ecb86c8bb31
+
 ```
 How much time does it takes to run the algorithm for n = 1000000 objects?
 It takes 36.018 seconds.
