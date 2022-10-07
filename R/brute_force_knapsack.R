@@ -61,8 +61,7 @@ brute_force_knapsack <- function(x, W, type="forloop", filter_items=FALSE, ncore
     #- Calculate v and w for each combination
     for (i in 1:n_comb)  {
       comb_bin[i,] <- intToBits(i)[1:n]
-      ind <- which(comb_bin[i,]==01)
-      comb_num[i,ind] <- 1
+      comb_num[i,] <- as.numeric(comb_bin[i,])
       comb_v[i] <- sum(comb_num[i,]*v)
       comb_w[i] <- sum(comb_num[i,]*w)
     }
