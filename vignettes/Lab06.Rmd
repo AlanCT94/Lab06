@@ -16,9 +16,11 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(Lab06)
-library(parallel)
 ```
-Generate knapsack with 2000 items
+This vignette contains the report for lab 6: writing fast R code. In this lab, different algorithms with different complexity have been implemented for the Knapsack problem to study the effects of the different algorithms with a focus on speed.
+
+
+Generate knapsack objects with n=2000 and n=1000000 items respectively:
 ```{r}
 RNGversion(min(as.character(getRversion()),"3.5.3"))
 
@@ -39,43 +41,64 @@ knapsack_objects_greedy <-
   )
 
 ```
-We run the system.time() function 10 times with a for loop to obtain the average
-time of the function to reduce the time error. And have a more precise comparison.
-1.1.2 Brute force search
+We run the system.time() function 10 or 100 times with a for loop to obtain the average time of the function to reduce the time error and have a more precise comparison.
+
+## 1.1.2 Brute force search
 
 Time for n=16 objects:
 
 ```{r}
+n_iter <- 1
 n_select <- 16
-system.time({brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500)})
+system.time(for (i in 1:n_iter) brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500))/n_iter
+
+system.time(for (i in 1:n_iter) brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 2000))/n_iter
 
 ```
 
-1.1.3 Dynamic programming
+It takes around 0.5s for both weights.
+
+## 1.1.3 Dynamic programming
 
 Time for n=500 objects:
 
 ```{r}
-#Add dynamic programming
+n_iter <- 1
+n_select <- 500
+
+system.time(for (i in 1:n_iter) knapsack_dynamic(x = knapsack_objects[1:n_select,],
+                                                 W = 3500))/n_iter
+
+system.time(for (i in 1:n_iter) knapsack_dynamic(x = knapsack_objects[1:n_select,], 
+                                                 W = 2000))/n_iter
+
+microbenchmark::microbenchmark(knapsack_dynamic(x = knapsack_objects[1:n_select,], 
+                                                W = 3500),
+                               knapsack_dynamic(x = knapsack_objects[1:n_select,], 
+                                                W = 2000))
+
 ```
+It takes around 0.7s for W=3500 and 0.3s for W=2000. It seems reasonable that the 
+smaller weight takes shorter time since the table the algorithm has to 
+construct becomes smaller with a smaller value for W.
 
-1.1.4 Greedy heuristic
-
+## 1.1.4 Greedy heuristic
 
 ```{r}
-n<-10
+n<-1
 system.time(for (i in 1:n) greedy_knapsack(knapsack_objects[1:1200,],W=3500)) / n
 #100000 Objects
-system.time(for (i in 1:n)greedy_knapsack(knapsack_objects_greedy[1:100000,],W=3500))/n
+system.time(for (i in 1:n)greedy_knapsack(knapsack_objects_greedy[1:100000,],
+                                          W=3500))/n
 ```
 How much time does it takes to run the algorithm for n = 1000000 objects?
 It takes 36.018 seconds.
 Approximately 35 seconds more than with 1200 objects.
 
-1.1.5 Improvement of greedy heuristic
+## 1.1.5 Improvement of greedy heuristic
 
 ```{r}
-n<-10
+n<-1
 system.time(for (i in 1:n) greedy_knapsack(knapsack_objects[1:1200,],W=3500)) / n
 greedy_knapsack(knapsack_objects[1:1200,],W=3500)
 system.time(for (i in 1:n) greedy_knapsack(knapsack_objects[1:1200,],W=3500,"plus")) / n
@@ -85,51 +108,83 @@ greedy_knapsack(knapsack_objects[1:1200,],W=3500,"plus")
 limit of the knapsack. In this particular case is the item 764, as we can see 
 above.
 
-1.1.6 Profile your code and optimize your code
+## 1.1.6 Profile your code and optimize your code
 
-... Below examples... develop text
+We compared for different main approaches to do the independent steps of the 
+brute force algorithm, and within two of the main approaches also some sub types. 
+The approaches were:
+
+- for loop
+- matrix calculations
+- apply
+    1a) part of the steps used variants of apply, and parts used matrix algebra
+    1b) all steps used variants of apply, in separate calls
+    2) all steps were collected into one function, that was used in apply (sapply)
+
+- parallel package
+    1a) part of the steps used variants of parApply, and parts used matrix algebra
+    1b) all steps used variants of parApply, in separate calls
+    2) all steps were collected into one function, that was used in parApply (parSapply)
+
+The comparisons were made using W=3500.    
 ```{r}
+n_iter <- 1
+n_select <- 18
 
-n_select <- 16
 #- For loop
 brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="forloop")
-system.time({
-brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="forloop")
-})
+system.time(for (i in 1:n_iter) brute_force_knapsack(
+  x = knapsack_objects[1:n_select,], W = 3500, type="forloop")) /n_iter
 
 #- Matrix --------------------#
-#filter items = false
 brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="matrix")
-system.time({
-  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="matrix")
-})
+system.time(for (i in 1:n_iter) brute_force_knapsack(
+  x = knapsack_objects[1:n_select,], W = 3500, type="matrix"))/n_iter
 
 #- Apply --------------------#
 brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="apply1a")
-system.time({
-  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="apply1a")
-})
+system.time(for (i in 1:n_iter) brute_force_knapsack(
+  x = knapsack_objects[1:n_select,], W = 3500, type="apply1a"))/n_iter
 
 brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="apply1b")
-system.time({
-  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="apply1b")
-})
+system.time(for (i in 1:n_iter) brute_force_knapsack(
+  x = knapsack_objects[1:n_select,], W = 3500, type="apply1b"))/n_iter
 
 brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="apply2")
-system.time({
-  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="apply2")
-})
+system.time(for (i in 1:n_iter) brute_force_knapsack(
+  x = knapsack_objects[1:n_select,], W = 3500, type="apply2"))/n_iter
 
 ```
+The matrix approach reduces the time with about 2/3 of the time compared to the
+for loop, and the combined apply/matrix variant further reduces the time, it 
+takes about 1/4 of the time compared to the for loop. The two other apply 
+approaches however takes longer time than the for loop.
 
-1.1.8 Parallelize brute force search
+Another way to improve the running time is to remove the items that have weight
+greater than W from the beginning:
 
-... add more text ....
+```{r}
+#- For loop
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="forloop", 
+                     filter_items=TRUE)
+system.time(for (i in 1:n_iter) brute_force_knapsack(
+  x = knapsack_objects[1:n_select,], W = 3500, type="forloop", filter_items=TRUE)) /n_iter
+```
+For the data in this example, it takes about 25% of the running time compared to
+not filtering the items with weight greater than W.
 
-comment re. ncores 
+
+## 1.1.8 Parallelise brute force search
+
+Three different parallelisation strategies were implemented. The times for the 
+different approaches are studied below. Note that it was not possible to set the 
+cores to the number of detected cores, since CRAN only allows 2 cores. The results 
+for 2 cores are also compared to only using 1 core.
+
 ```{r}
 #- Set number of knapsack items
-n_select <- 16
+n_iter <- 1
+n_select <- 18
 
 #- Set number of cores
 ncores <- 2
@@ -137,46 +192,51 @@ ncores <- 2
 #- Note. number of available cores can be checked with:
 ncores_available <- parallel::detectCores()
 
-#- Parallel --------------------#
-brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1a", ncores=ncores)
-system.time({
-  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1a", ncores=ncores)
-})
+#- Run algorithms
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1a",
+                     ncores=ncores)
+system.time(for (i in 1:n_iter) brute_force_knapsack(x = knapsack_objects[1:n_select,],
+                                                     W = 3500, type="parallel1a", 
+                                                     ncores=ncores))/n_iter
 
-brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1b", ncores=ncores)
-system.time({
-  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1b", ncores=ncores)
-})
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1b", 
+                     ncores=ncores)
+system.time(for (i in 1:n_iter) brute_force_knapsack(x = knapsack_objects[1:n_select,], 
+                                                     W = 3500, type="parallel1b", 
+                                                     ncores=ncores))/n_iter
 
-brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel2", ncores=ncores)
-system.time({
-  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel2", ncores=ncores)
-})
-
-
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel2", 
+                     ncores=ncores)
+system.time(for (i in 1:n_iter) brute_force_knapsack(x = knapsack_objects[1:n_select,], 
+                                                     W = 3500, type="parallel2", 
+                                                     ncores=ncores))/n_iter
 ```
+Parallel computations did not improve the running time in these implementations.
 
 Try with only one (1) core:
 ```{r}
 #- Set number of cores
 ncores <- 1
 
+#- Run algorithms
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1a", 
+                     ncores=ncores)
+system.time(for (i in 1:n_iter) brute_force_knapsack(x = knapsack_objects[1:n_select,], 
+                                                     W = 3500, type="parallel1a", 
+                                                     ncores=ncores))/n_iter
 
-#- Parallel --------------------#
-brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1a", ncores=ncores)
-system.time({
-  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1a", ncores=ncores)
-})
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1b", 
+                     ncores=ncores)
+system.time( for (i in 1:n_iter) brute_force_knapsack(x = knapsack_objects[1:n_select,], 
+                                                      W = 3500, type="parallel1b", 
+                                                      ncores=ncores)) /n_iter
 
-brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1b", ncores=ncores)
-system.time({
-  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1b", ncores=ncores)
-})
-
-brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel2", ncores=ncores)
-system.time({
-  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel2", ncores=ncores)
-})
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel2", 
+                     ncores=ncores)
+system.time( for (i in 1:n_iter) brute_force_knapsack(x = knapsack_objects[1:n_select,], 
+                                                      W = 3500, type="parallel2", 
+                                                      ncores=ncores)) /n_iter
 
 ```
-
+The running times for n=1 core do not differ that much from using n=2 cores in
+this implementation.
