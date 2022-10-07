@@ -31,8 +31,16 @@ knapsack_objects <-
     v=runif(n = n, 0, 10000)
   )
 
-```
+n <- 100000
+knapsack_objects_greedy <-
+  data.frame(
+    w=sample(1:4000, size = n, replace = TRUE),
+    v=runif(n = n, 0, 10000)
+  )
 
+```
+We run the system.time() function 10 times with a for loop to obtain the average
+time of the function to reduce the time error. And have a more precise comparison.
 1.1.2 Brute force search
 
 Time for n=16 objects:
@@ -52,21 +60,30 @@ Time for n=500 objects:
 ```
 
 1.1.4 Greedy heuristic
-```{r}
-# Create knapsack object with 1000000 items
-```
-Time for n=1000000 objects:
+
 
 ```{r}
-# Add greedy
+n<-10
+system.time(for (i in 1:n) greedy_knapsack(knapsack_objects[1:1200,],W=3500)) / n
+#100000 Objects
+system.time(for (i in 1:n)greedy_knapsack(knapsack_objects_greedy[1:100000,],W=3500))/n
 ```
+How much time does it takes to run the algorithm for n = 1000000 objects?
+It takes 36.018 seconds.
+Approximately 35 seconds more than with 1200 objects.
 
 1.1.5 Improvement of greedy heuristic
 
 ```{r}
-# Example of improved greedy heuristic
-# why still greedy?
+n<-10
+system.time(for (i in 1:n) greedy_knapsack(knapsack_objects[1:1200,],W=3500)) / n
+greedy_knapsack(knapsack_objects[1:1200,],W=3500)
+system.time(for (i in 1:n) greedy_knapsack(knapsack_objects[1:1200,],W=3500,"plus")) / n
+greedy_knapsack(knapsack_objects[1:1200,],W=3500,"plus")
 ```
+"Plus" optimization, finds the next item which Weight value fits the  Weight 
+limit of the knapsack. In this particular case is the item 764, as we can see 
+above.
 
 1.1.6 Profile your code and optimize your code
 
