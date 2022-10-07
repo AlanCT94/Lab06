@@ -5,6 +5,9 @@
 #' @param W knapsack size
 #' @param type type of calculation
 #' @param filter_items logical indicating
+#' @param ncores number of cores to use in parallel computing (only applies for
+#'               types = "parallel1a", "parallel1b" and "parallel2"). Note that
+#'               default is set to two because of CRAN limit.
 #'
 #' @return list with value and elements
 #' @export
@@ -21,14 +24,14 @@
 #' x <- knapsack_objects[1:8,]
 #' brute_force_knapsack(x = x, W = 3500)
 #' brute_force_knapsack(x = x, W = 3500, type="matrix", filter_items=TRUE)
-brute_force_knapsack <- function(x, W, type="forloop", filter_items=FALSE){
+brute_force_knapsack <- function(x, W, type="forloop", filter_items=FALSE, ncores=2){
 
   #- Checks of input
   stopifnot(is.data.frame(x),names(x)==c("w","v"),is.numeric(x$w),
             is.numeric(x$v),x$w>0,x$v>0,W>=0)
 
   #- Set cores for parallel
-  cores <- 2
+  #cores <- 2
 
   n1 <- nrow(x)
 
@@ -106,11 +109,11 @@ brute_force_knapsack <- function(x, W, type="forloop", filter_items=FALSE){
     v_mat <- matrix(v,nrow=n)
     w_mat <- matrix(w,nrow=n)
 
-    #cores <- parallel::detectCores()
+    #ncores <- parallel::detectCores()
 
     # Using parLapply()
     # Set up the ’cluster’
-    cl <- parallel::makeCluster(cores, type = "PSOCK")
+    cl <- parallel::makeCluster(ncores, type = "PSOCK")
     # Parallel calculation (parLapply):
     system.time({
       comb_bin <- parallel::parSapply(cl, 1:n_comb, intToBits)
@@ -124,10 +127,10 @@ brute_force_knapsack <- function(x, W, type="forloop", filter_items=FALSE){
 
   if (type=="parallel1b") {
     #vect <- 1:n_comb
-    #cores <- parallel::detectCores()
+    #ncores <- parallel::detectCores()
     # Using parLapply()
     # Set up the ’cluster’
-    cl <- parallel::makeCluster(cores, type = "PSOCK")
+    cl <- parallel::makeCluster(ncores, type = "PSOCK")
     # Parallel calculation (parLapply):
     system.time({
       comb_bin <- parallel::parSapply(cl, 1:n_comb, intToBits)
@@ -141,10 +144,10 @@ brute_force_knapsack <- function(x, W, type="forloop", filter_items=FALSE){
 
   if (type=="parallel2") {
 
-    #cores <- parallel::detectCores()
+    #ncores <- parallel::detectCores()
     # Using parLapply()
     # Set up the ’cluster’
-    cl <- parallel::makeCluster(cores, type = "PSOCK")
+    cl <- parallel::makeCluster(ncores, type = "PSOCK")
     # Parallel calculation (parLapply):
     #vect <- 1:n_comb
     comb_res <- parallel::parSapply(cl,1:n_comb,FUN=calc_comb,n,v,w)

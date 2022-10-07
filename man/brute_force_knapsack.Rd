@@ -4,7 +4,7 @@
 \alias{brute_force_knapsack}
 \title{Title}
 \usage{
-brute_force_knapsack(x, W, type = "forloop", filter_items = FALSE)
+brute_force_knapsack(x, W, type = "forloop", filter_items = FALSE, ncores = 2)
 }
 \arguments{
 \item{x}{data frame with two variables v and w}
@@ -14,6 +14,10 @@ brute_force_knapsack(x, W, type = "forloop", filter_items = FALSE)
 \item{type}{type of calculation}
 
 \item{filter_items}{logical indicating}
+
+\item{ncores}{number of cores to use in parallel computing (only applies for
+types = "parallel1a", "parallel1b" and "parallel2"). Note that
+default is set to two because of CRAN limit.}
 }
 \value{
 list with value and elements
