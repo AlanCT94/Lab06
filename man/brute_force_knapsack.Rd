@@ -2,7 +2,7 @@
 % Please edit documentation in R/brute_force_knapsack.R
 \name{brute_force_knapsack}
 \alias{brute_force_knapsack}
-\title{Title}
+\title{brute_force_knapsack}
 \usage{
 brute_force_knapsack(x, W, type = "forloop", filter_items = FALSE, ncores = 2)
 }
@@ -23,7 +23,8 @@ default is set to two because of CRAN limit.}
 list with value and elements
 }
 \description{
-Title
+Implements several methods to run the brute force algorithm for the knapsack
+problem
 }
 \examples{
 RNGversion(min(as.character(getRversion()),"3.5.3"))

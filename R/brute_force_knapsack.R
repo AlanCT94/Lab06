@@ -1,5 +1,7 @@
-
-#' Title
+#' brute_force_knapsack
+#'
+#' Implements several methods to run the brute force algorithm for the knapsack
+#' problem
 #'
 #' @param x data frame with two variables v and w
 #' @param W knapsack size
