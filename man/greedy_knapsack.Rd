@@ -2,7 +2,7 @@
 % Please edit documentation in R/greedy_knapsack.R
 \name{greedy_knapsack}
 \alias{greedy_knapsack}
-\title{Knapsack greedy approximation}
+\title{Greedy heuristic}
 \usage{
 greedy_knapsack(x, W, type = "normal")
 }
@@ -17,7 +17,7 @@ greedy_knapsack(x, W, type = "normal")
 List with values and elements
 }
 \description{
-Knapsack greedy approximation
+Greedy heuristic
 }
 \examples{
 RNGversion(min(as.character(getRversion()),"3.5.3"))
