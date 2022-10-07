@@ -109,22 +109,56 @@ system.time({
 
 ... add more text ....
 
+comment re. ncores 
 ```{r}
+#- Set number of knapsack items
 n_select <- 16
+
+#- Set number of cores
+ncores <- 2
+
+#- Note. number of available cores can be checked with:
+ncores_available <- parallel::detectCores()
+
 #- Parallel --------------------#
-brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1a")
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1a", ncores=ncores)
 system.time({
-  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1a")
+  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1a", ncores=ncores)
 })
 
-brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1b")
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1b", ncores=ncores)
 system.time({
-  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1b")
+  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1b", ncores=ncores)
 })
 
-brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel2")
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel2", ncores=ncores)
 system.time({
-  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel2")
+  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel2", ncores=ncores)
+})
+
+
+```
+
+Try with only one (1) core:
+```{r}
+#- Set number of cores
+ncores <- 1
+
+
+#- Parallel --------------------#
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1a", ncores=ncores)
+system.time({
+  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1a", ncores=ncores)
+})
+
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1b", ncores=ncores)
+system.time({
+  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1b", ncores=ncores)
+})
+
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel2", ncores=ncores)
+system.time({
+  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel2", ncores=ncores)
 })
 
 ```
