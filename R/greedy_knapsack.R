@@ -1,18 +1,5 @@
 
-RNGversion(min(as.character(getRversion()),"3.5.3"))
-
-set.seed(42, kind = "Mersenne-Twister", normal.kind = "Inversion")
-n <- 100000
-knapsack_objects <-
-  data.frame(
-    w=sample(1:4000, size = n, replace = TRUE),
-    v=runif(n = n, 0, 10000)
-  )
-
-
-
-
-#' Knapsack greedy approximation
+#' Greedy heuristic
 #'
 #' @param x is the data frame with the items value and weigth knapsack objects
 #' @param W is the weight limit of the knap sack
@@ -34,6 +21,17 @@ knapsack_objects <-
 #' greedy_knapsack(x = x, W = 3500)
 #' greedy_knapsack(x = x, W = 3500, type = "plus")
 
+
+
+# RNGversion(min(as.character(getRversion()),"3.5.3"))
+#
+# set.seed(42, kind = "Mersenne-Twister", normal.kind = "Inversion")
+# n <- 100000
+# knapsack_objects <-
+#   data.frame(
+#     w=sample(1:4000, size = n, replace = TRUE),
+#     v=runif(n = n, 0, 10000)
+#   )
 
 greedy_knapsack <- function(x,W, type= "normal"){
   stopifnot(class(x) == "data.frame") #check that is a data frame
