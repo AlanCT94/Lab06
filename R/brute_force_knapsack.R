@@ -27,6 +27,9 @@ brute_force_knapsack <- function(x, W, type="forloop", filter_items=FALSE){
   stopifnot(is.data.frame(x),names(x)==c("w","v"),is.numeric(x$w),
             is.numeric(x$v),x$w>0,x$v>0,W>=0)
 
+  #- Set cores for parallel
+  cores <- 2
+
   n1 <- nrow(x)
 
   #- If remove items for which w > W
@@ -98,11 +101,13 @@ brute_force_knapsack <- function(x, W, type="forloop", filter_items=FALSE){
   }
 
   if (type=="parallel1a") {
+    options(mc.cores=2)
     #vect <- 1:n_comb
     v_mat <- matrix(v,nrow=n)
     w_mat <- matrix(w,nrow=n)
 
-    cores <- parallel::detectCores()
+    #cores <- parallel::detectCores()
+
     # Using parLapply()
     # Set up the ’cluster’
     cl <- parallel::makeCluster(cores, type = "PSOCK")
@@ -119,7 +124,7 @@ brute_force_knapsack <- function(x, W, type="forloop", filter_items=FALSE){
 
   if (type=="parallel1b") {
     #vect <- 1:n_comb
-    cores <- parallel::detectCores()
+    #cores <- parallel::detectCores()
     # Using parLapply()
     # Set up the ’cluster’
     cl <- parallel::makeCluster(cores, type = "PSOCK")
@@ -136,7 +141,7 @@ brute_force_knapsack <- function(x, W, type="forloop", filter_items=FALSE){
 
   if (type=="parallel2") {
 
-    cores <- parallel::detectCores()
+    #cores <- parallel::detectCores()
     # Using parLapply()
     # Set up the ’cluster’
     cl <- parallel::makeCluster(cores, type = "PSOCK")

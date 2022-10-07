@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(Lab06)
+library(parallel)
 ```
 Generate knapsack with 2000 items
 ```{r}
@@ -125,5 +126,6 @@ brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel
 system.time({
   brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel2")
 })
+
 ```
 
