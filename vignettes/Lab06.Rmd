@@ -102,22 +102,7 @@ greedy_knapsack(knapsack_objects[1:1200,],W=3500)
 system.time(for (i in 1:n) greedy_knapsack(knapsack_objects[1:1200,],W=3500,"plus")) / n
 greedy_knapsack(knapsack_objects[1:1200,],W=3500,"plus")
 ```
-(a)
-R:"Plus" optimization, finds the next item which Weight value fits the  Weight 
-limit of the knapsack. In this particular case is the item 764, as we can see 
-above.
-(b) Try to find the reason why a better solution is found.
-R: There is two possible reasons to why a better solution is found:
-1. Instead of using a loop to create the ratio(Value/Weight) column. It can be used
-the efficiency of R by just assign anew column that directly assigns the division.
-i.e. ratio <- Value/Weight
-
-2. Supposed that the objects can be divided.
-On the original greedy algorithm, you should consider one object as a whole unit,
-which can not be divided. But if we consider that the items can be partitioned then,
-when we arrived or passed the Weight limit of the knapsack; we could take just a part
-of the next items that fits into the knapsack. Doing it like this, the algorithm
-maximize the knapsack value without excluding the whole last item.
+It is possible to return a better solution on the greedy algorithm. If the algorithm keeps finding the next value or values that fits in the snapback, instead of stoping one item before passing the limit. It will still be a gredy one, because it keeps loking for the next item(s) on the same order going in a decreasing order; and it has a O(n), because the time it takes to compute still increases as the number of items increase. Because the principle of finding and ordering the values has not change.
 
 ## 1.1.6 Profile your code and optimize your code
 
