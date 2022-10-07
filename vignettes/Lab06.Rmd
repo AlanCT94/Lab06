@@ -39,7 +39,8 @@ knapsack_objects_greedy <-
   )
 
 ```
-
+We run the system.time() function 10 times with a for loop to obtain the average
+time of the function to reduce the time error. And have a more precise comparison.
 1.1.2 Brute force search
 
 Time for n=16 objects:
