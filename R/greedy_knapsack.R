@@ -53,6 +53,7 @@ greedy_knapsack <- function(x,W, type= "normal"){
 
   index <- c()
   total_value <- 0
+  weight_sum <- 0
   y<-1
 
   while( weight_sum <= W){
