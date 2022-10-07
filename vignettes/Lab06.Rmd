@@ -108,6 +108,22 @@ system.time({
 
 ... add more text ....
 
+```{r}
+n_select <- 16
+#- Parallel --------------------#
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1a")
+system.time({
+  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1a")
+})
 
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1b")
+system.time({
+  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel1b")
+})
+
+brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel2")
+system.time({
+  brute_force_knapsack(x = knapsack_objects[1:n_select,], W = 3500, type="parallel2")
+})
 ```
 
