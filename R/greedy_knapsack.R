@@ -38,16 +38,16 @@ greedy_knapsack <- function(x,W, type= "normal"){
   stopifnot(colnames(x) == c("w","v"),is.numeric(x$w),is.numeric(x$v),x$w>0, x$v>0)
   stopifnot(class(W) == "numeric", W>0) #check that is a numeric value
 
-  i <- 1
+  n <- nrow(x)
+  v <- x$v
+  w <- x$w
 
-  ratio <- matrix(nrow = nrow(x), ncol = 1)
-  ratio <- data.frame(ratio)
-  weight_sum <- 0
-  while(i<= nrow(x)){
-    ratio[i,1] <- (x[i,2]/x[i,1])
-    i <- i + 1
-    }
+  #- Calculate value per unit weight
+  ratio <- v/w
+
   x1 <- cbind(x,ratio)
+
+  # print(x1)
 
   order<- x1[order(x1[,3],decreasing = TRUE),c(1,2,3)]
 
